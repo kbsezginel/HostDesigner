@@ -1,0 +1,7 @@
+AND LINK hosta=Li_lig hostb=Li_lig numview=1000 
+out=case2 useclass noasym drivea driveb
+
+
+Runs with drives examine more structures and as a result can take longer
+to comlplete.  This example evaluates 5,641,542 geometries in 31.4 sec on
+a MacPro (2.8 GHz processor).

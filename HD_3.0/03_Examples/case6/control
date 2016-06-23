@@ -1,0 +1,5 @@
+OVER hosta=over2 maxnrot=3 maxconn=5 drivea 
+
+
+This example is an overlay run with drives.  The run evaluates 302,076
+geometries in 47.9 sec on a MacPro (2.8 GHz processor).
