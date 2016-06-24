@@ -1,7 +1,7 @@
 ******************************************************************************
 ******************************************************************************
 HOSTDESIGNER RUN SUMMARY
-Date of run:  Fri Sep 18 13:46:32 2015
+Date of run:  Fri Jun 24 15:33:50 2016
 ******************************************************************************
 ******************************************************************************
 Name of Host A:  Untitled                                                    
@@ -30,11 +30,11 @@ B  I   -0.200000  0.200000 0.050000 31 14
                Number of links used:           914
 Total number of structures examined:          8758
         Number of structures stored:            16
-  Time spent (sec) initializing run:        0.0094
-Time spent (min) building molecules:        0.0507
-Time spent (sec) building molecules:        3.0397
-     build time (sec) per structure:     0.0003471
- Time spent (sec) writing molecules:        0.0188
-                   Total time (sec):        3.0680
-                   Total time (min):        0.0511
+  Time spent (sec) initializing run:        0.0120
+Time spent (min) building molecules:        0.0190
+Time spent (sec) building molecules:        1.1400
+     build time (sec) per structure:     0.0001302
+ Time spent (sec) writing molecules:        0.0120
+                   Total time (sec):        1.1640
+                   Total time (min):        0.0194
 ******************************************************************************

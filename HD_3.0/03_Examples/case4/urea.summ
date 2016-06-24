@@ -1,0 +1,42 @@
+******************************************************************************
+******************************************************************************
+HOSTDESIGNER RUN SUMMARY
+Date of run:  Fri Jun 24 15:28:34 2016
+******************************************************************************
+******************************************************************************
+Name of Host A:  Urea bound twice to the same oxygen on nitrate              
+******************************************************************************
+Name of Host B:  Urea bound once to each of two oxygen on one nitrate        
+******************************************************************************
+Input control file follows:
+ 
+LINK hosta=urea1 hostb=urea2 out=urea AND                                       
+drivea driveb noasym maxnrot=4  numview=500                                     
+                                                                                
+This example uses the LINKER algorithm to search for bis-urea tweezers that     
+are organized to bind the multiatom guest nitrate                               
+                                                                                
+The run examines 5,452,465 geometries in 47.5 sec on a MacPro                   
+(2.8 GHz processor)                                                             
+ 
+Drive input for host A follows:
+ A G -10. 10. 10. 16 18 19
+ D I -20. 20. 20. 3 5
+ 
+Drive input for host B follows:
+ A G -10. 10. 10. 19 15 16
+ D I -20. 20. 20. 3 5
+ 
+******************************************************************************
+               Number of links read:          8266
+               Number of links used:           728
+Total number of structures examined:       5452465
+        Number of structures stored:          1000
+  Time spent (sec) initializing run:        0.0120
+Time spent (min) building molecules:        0.3661
+Time spent (sec) building molecules:       21.9640
+     build time (sec) per structure:     0.0000040
+ Time spent (sec) writing molecules:        0.1920
+                   Total time (sec):       22.1680
+                   Total time (min):        0.3695
+******************************************************************************
