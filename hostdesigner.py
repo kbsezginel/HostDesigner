@@ -94,3 +94,28 @@ def drive_export(drive_path, export_dir, num=5, xyz_name=''):
         xyz_file.close()
 
         start_line += drive_structures['num_atoms'][structure] + 2
+
+
+def host_import(host_path):
+    """
+    Convert structure file to host format.
+    """
+    structure_file = open(structure_path, 'r')
+    structure_lines = structure_file.readlines()
+    structure_file.close()
+
+    host_file = open(host_path, 'w')
+    host_file.write(host_name + '\n')
+    host_file.write(' ' + num_atoms + '\t1\n')
+
+    for atom_info in atom_list:
+        host_file.write()
+
+    host_file.write(' ' + num_attachment + '\n')
+
+    for attachment_info in attachment_list:
+        host_file.write()
+
+    # Add drive info and additional host info
+
+    host_file.close()
