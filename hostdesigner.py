@@ -96,6 +96,10 @@ def drive_export(drive_path, export_dir, num=5, xyz_name=''):
         start_line += drive_structures['num_atoms'][structure] + 2
 
 
+def hdo2host():
+
+# Required variables:
+# - atachment info
 def host_import(host_path):
     """
     Convert structure file to host format.
