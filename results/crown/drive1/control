@@ -1,0 +1,9 @@
+LINK drivea driveb testdrive
+
+
+This example illustrates the use of testdrive.  It produces two files named
+out_testa.hdo and out_testb.hdo
+
+Viewing the contents of these files with a molecular graphics software, for
+example, pcmodel, provides a way to ensure that the drive specifications are
+working as desired.
