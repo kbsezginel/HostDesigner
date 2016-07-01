@@ -87,6 +87,9 @@ def drive_read(drive_dir, num='all', table=True, drive='out_testa.hdo'):
     # Write xyz informationm
     start_line = 2
     for structure in range(min(num, num_structures)):
+        host_lines = drive_structures['drive'][structure]
+        host_lines += ' ' + str(drive_structures['num_atoms'][structure]) + '\t1\n'
+
         xyz_lines = str(drive_structures['num_atoms'][structure]) + '\n'
         xyz_lines += str(structure + 1) + '_' + drive_structures['drive'][structure]
 
@@ -94,14 +97,20 @@ def drive_read(drive_dir, num='all', table=True, drive='out_testa.hdo'):
         drive_structures['coor'].append([])
 
         end_line = start_line + drive_structures['num_atoms'][structure]
-        for line in drive_lines[start_line:end_line]:
+        for line_index, line in enumerate(drive_lines[start_line:end_line]):
+            atom_name = line.split()[0]
+            new_line = '  {:2} {:3}{}'.format(atom_name, line_index + 1, line[3:])
+            host_lines += new_line
+
             name, x, y, z = line.split()[0], line.split()[1], line.split()[2], line.split()[3]
             xyz_lines += name + '\t' + x + '\t' + y + '\t' + z + '\n'
+
             drive_structures['atom'][structure].append(name)
             drive_structures['coor'][structure].append([float(x), float(y), float(z)])
 
         start_line += drive_structures['num_atoms'][structure] + 2
 
+        drive_structures['host'].append(host_lines)
         drive_structures['xyz'].append(xyz_lines)
 
     if table:
