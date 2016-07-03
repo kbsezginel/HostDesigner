@@ -1,0 +1,9 @@
+LINK numview=1000
+
+
+Any text included in the input file after any line which does not contain
+'AND' is not read by HostDesigner, except to include it in the summary
+file.  User comments may (optionally) be put here.
+
+This example run evaluates 1,652,352 structures in 12.8 sec on a MacPro
+(2.8 GHz processor)

@@ -1,0 +1,41 @@
+******************************************************************************
+******************************************************************************
+HOSTDESIGNER RUN SUMMARY
+Date of run:  Sun Jul  3 01:11:27 2016
+******************************************************************************
+******************************************************************************
+Name of Host A:  run 2 host input (drive 3 degrees)                          
+******************************************************************************
+Name of Host B:  run 2 host input (drive 3 degrees)                          
+******************************************************************************
+Input control file follows:
+ 
+LINK drivea driveb numview=1000                                                 
+                                                                                
+                                                                                
+Any text included in the input file after any line which does not contain       
+'AND' is not read by HostDesigner, except to include it in the summary          
+file.  User comments may (optionally) be put here.                              
+                                                                                
+This example run evaluates 1,652,352 structures in 12.8 sec on a MacPro         
+(2.8 GHz processor)                                                             
+ 
+Drive input for host A follows:
+ B G -0.5 0.5 0.1 1 9
+ 
+Drive input for host B follows:
+ B G -0.5 0.5 0.1 1 9
+ 
+******************************************************************************
+               Number of links read:          8266
+               Number of links used:          8266
+Total number of structures examined:      50901774
+        Number of structures stored:          1000
+  Time spent (sec) initializing run:        0.0200
+Time spent (min) building molecules:        1.0567
+Time spent (sec) building molecules:       63.4040
+     build time (sec) per structure:     0.0000012
+ Time spent (sec) writing molecules:        0.3360
+                   Total time (sec):       63.7600
+                   Total time (min):        1.0627
+******************************************************************************

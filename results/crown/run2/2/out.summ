@@ -1,0 +1,35 @@
+******************************************************************************
+******************************************************************************
+HOSTDESIGNER RUN SUMMARY
+Date of run:  Sun Jul  3 00:26:02 2016
+******************************************************************************
+******************************************************************************
+Name of Host A:  Drive 1 - Larger host                                       
+******************************************************************************
+Name of Host B:  Drive 1 - Larger host                                       
+******************************************************************************
+Input control file follows:
+ 
+LINK numview=1000                                                               
+                                                                                
+                                                                                
+Any text included in the input file after any line which does not contain       
+'AND' is not read by HostDesigner, except to include it in the summary          
+file.  User comments may (optionally) be put here.                              
+                                                                                
+This example run evaluates 1,652,352 structures in 12.8 sec on a MacPro         
+(2.8 GHz processor)                                                             
+ 
+******************************************************************************
+               Number of links read:          8266
+               Number of links used:          8266
+Total number of structures examined:        434218
+        Number of structures stored:          1000
+  Time spent (sec) initializing run:        0.0160
+Time spent (min) building molecules:        0.0604
+Time spent (sec) building molecules:        3.6240
+     build time (sec) per structure:     0.0000083
+ Time spent (sec) writing molecules:        0.3240
+                   Total time (sec):        3.9640
+                   Total time (min):        0.0661
+******************************************************************************

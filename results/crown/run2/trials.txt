@@ -1,0 +1,5 @@
+1) LINKER run with smaller host structures
+2) LINKER run with larger host structures with attachment points only for O atoms
+3) LINKER run with smaller linker with single Li - O(1) bond distance drive
+4) LINKER run with smaller linker with single Li - O(1) bond angle drive
+5) LINKER run with smaller liner with angle drive on C-O-H bond (4-1-2) and maxconn=2
