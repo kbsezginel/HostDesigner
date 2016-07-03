@@ -13,7 +13,7 @@ def hdo_read(hdo_dir, num='all', table=True, hdo='out_1.hdo'):
     hdo_file.close()
 
     num_structures = 0
-    hdo_structures = {'rmsd': [], 'energy': [], 'num_atoms': [],
+    hdo_structures = {'rmsd': [], 'energy': [], 'num_atoms': [], 'atom': [], 'coor': [],
                       'info': [], 'xyz': [], 'host': [], 'linker': [], 'index': []}
     for line_index, line in enumerate(hdo_lines):
         if line.replace(' ', '').strip('\n').isdigit():
@@ -37,6 +37,9 @@ def hdo_read(hdo_dir, num='all', table=True, hdo='out_1.hdo'):
         xyz_lines = str(hdo_structures['num_atoms'][structure]) + '\n'
         xyz_lines += str(structure + 1) + '_' + str(hdo_structures['rmsd'][structure]) + '\n'
 
+        hdo_structures['atom'].append([])
+        hdo_structures['coor'].append([])
+
         end_line = start_line + hdo_structures['num_atoms'][structure]
         for line_index, line in enumerate(hdo_lines[start_line:end_line]):
             atom_name = line.split()[0]
@@ -45,6 +48,9 @@ def hdo_read(hdo_dir, num='all', table=True, hdo='out_1.hdo'):
 
             name, x, y, z = line.split()[0], line.split()[1], line.split()[2], line.split()[3]
             xyz_lines += name + '\t' + x + '\t' + y + '\t' + z + '\n'
+
+            hdo_structures['atom'][structure].append(name)
+            hdo_structures['coor'][structure].append([float(x), float(y), float(z)])
 
         hdo_structures['host'].append(host_lines)
         hdo_structures['xyz'].append(xyz_lines)
@@ -58,6 +64,31 @@ def hdo_read(hdo_dir, num='all', table=True, hdo='out_1.hdo'):
                         'Energy': hdo_structures['energy'][:num]}, headers="keys"))
 
     return hdo_structures
+
+
+def hdo_linker(hdo_structures, linkers, table=True, export=[False, os.getcwd(), 'xyz']):
+    linker_structures = {'index': [], 'linker': [], 'rmsd': [], 'energy': [], 'num_atoms': [], 'atom': [], 'coor': []}
+    for structure_index, hdo_linker in enumerate(hdo_structures['linker']):
+        for linker in linkers:
+            if hdo_linker == linker:
+                linker_structures['index'].append(hdo_structures['index'][structure_index])
+                linker_structures['rmsd'].append(hdo_structures['rmsd'][structure_index])
+                linker_structures['energy'].append(hdo_structures['energy'][structure_index])
+                linker_structures['num_atoms'].append(hdo_structures['num_atoms'][structure_index])
+                linker_structures['linker'].append(hdo_structures['linker'][structure_index])
+                linker_structures['atom'].append(hdo_structures['atom'][structure_index])
+                linker_structures['coor'].append(hdo_structures['coor'][structure_index])
+                if export[0]:
+                    hdo_export(hdo_structures, structure_index, export[1], name=linker, exp_format=export[2])
+
+    if table:
+        print(tabulate({'Structure': linker_structures['index'],
+                        'Linker': linker_structures['linker'],
+                        'Num Atoms': linker_structures['num_atoms'],
+                        'RMSD': linker_structures['rmsd'],
+                        'Energy': linker_structures['energy']}, headers="keys"))
+
+    return linker_structures
 
 
 def drive_read(drive_dir, num='all', table=True, drive='out_testa.hdo'):
@@ -88,7 +119,7 @@ def drive_read(drive_dir, num='all', table=True, drive='out_testa.hdo'):
     start_line = 2
     for structure in range(min(num, num_structures)):
         host_lines = drive_structures['drive'][structure]
-        host_lines += ' ' + str(drive_structures['num_atoms'][structure]) + '\t1\n'
+        host_lines += ' ' + str(drive_structures['num_atoms'][structure]) + '   1\n'
 
         xyz_lines = str(drive_structures['num_atoms'][structure]) + '\n'
         xyz_lines += str(structure + 1) + '_' + drive_structures['drive'][structure]
@@ -218,16 +249,16 @@ def drive_export(drive_path, export_dir, num=5, xyz_name=''):
         start_line += drive_structures['num_atoms'][structure] + 2
 
 
-def hdo_export(hdo_structures, hdo_index, export_dir, exp_format='xyz'):
+def hdo_export(hdo_structures, hdo_index, export_dir, name='hosta', exp_format='xyz'):
 
     if exp_format == 'xyz':
-        xyz_path = os.path.join(export_dir, str(hdo_index) + 'hdo' + '.xyz')
+        xyz_path = os.path.join(export_dir, str(hdo_index) + name + '.xyz')
         xyz_file = open(xyz_path, 'w')
         xyz_file.write(hdo_structures['xyz'][hdo_index])
         xyz_file.close()
 
     if exp_format == 'host':
-        host_path = os.path.join(export_dir, 'hosta')
+        host_path = os.path.join(export_dir, str(hdo_index) + name)
         host_file = open(host_path, 'w')
         host_file.write(hdo_structures['host'][hdo_index])
         host_file.close()
@@ -258,3 +289,18 @@ def host_import(host_path):
     # Add drive info and additional host info
 
     host_file.close()
+
+
+def angle_between(C1, C0, C2):
+    """ Calculates bond angle for three given atom positions. => C1-CO-C2 """
+    import numpy as np
+    from math import acos, degrees
+    coor1 = []
+    coor2 = []
+    for c0, c1, c2 in zip(C0, C1, C2):
+        coor1.append(c1 - c0)
+        coor2.append(c2 - c0)
+
+    angle = np.dot(coor1, coor2) / (np.linalg.norm(coor1) * np.linalg.norm(coor2))
+
+    return degrees(acos(angle))

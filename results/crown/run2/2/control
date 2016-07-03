@@ -1,4 +1,4 @@
-LINK numview=1000
+LINK useclass maxconn=2 numview=1000
 
 
 Any text included in the input file after any line which does not contain

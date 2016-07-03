@@ -1,0 +1,43 @@
+******************************************************************************
+******************************************************************************
+HOSTDESIGNER RUN SUMMARY
+Date of run:  Sun Jul  3 17:55:51 2016
+******************************************************************************
+******************************************************************************
+Name of Host A:  drive C-O-C angles fom 111 degrees to 114 degrees           
+******************************************************************************
+Name of Host B:  drive C-O-C angles fom 111 degrees to 114 degrees           
+******************************************************************************
+Input control file follows:
+ 
+LINK drivea driveb maxconn=2 useclass numview=1000                              
+                                                                                
+                                                                                
+This example illustrates the use of testdrive.  It produces two files named     
+out_testa.hdo and out_testb.hdo                                                 
+                                                                                
+Viewing the contents of these files with a molecular graphics software, for     
+example, pcmodel, provides a way to ensure that the drive specifications are    
+working as desired.                                                             
+ 
+Drive input for host A follows:
+ A I 0. 5. 1.  13 12 7
+ A I 0. 5. 1.  2  1  6
+ 
+Drive input for host B follows:
+ A I 0. 5. 1.  13 12 7
+ A I 0. 5. 1.  2  1  6
+ 
+******************************************************************************
+               Number of links read:           196
+               Number of links used:           196
+Total number of structures examined:      52227534
+        Number of structures stored:          1000
+  Time spent (sec) initializing run:        0.0240
+Time spent (min) building molecules:        3.7564
+Time spent (sec) building molecules:      225.3840
+     build time (sec) per structure:     0.0000043
+ Time spent (sec) writing molecules:        0.3440
+                   Total time (sec):      225.7520
+                   Total time (min):        3.7625
+******************************************************************************
