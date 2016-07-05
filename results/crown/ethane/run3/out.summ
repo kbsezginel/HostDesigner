@@ -1,12 +1,12 @@
 ******************************************************************************
 ******************************************************************************
 HOSTDESIGNER RUN SUMMARY
-Date of run:  Sun Jul  3 22:53:23 2016
+Date of run:  Tue Jul  5 01:41:58 2016
 ******************************************************************************
 ******************************************************************************
 Name of Host A:  drive C-O-C angles fom 111 degrees to 114 degrees           
 ******************************************************************************
-Name of Host B:  drive C-O-C angles fom 111 degrees to 114 degrees           
+Name of Host B:  45:RMSD=2.788,nrot=3,E=_3.239_ethane________________________
 ******************************************************************************
 Input control file follows:
  
@@ -23,13 +23,13 @@ working as desired.
 ******************************************************************************
                Number of links read:           196
                Number of links used:           196
-Total number of structures examined:          5456
-        Number of structures stored:           346
+Total number of structures examined:         14732
+        Number of structures stored:          1000
   Time spent (sec) initializing run:        0.0080
-Time spent (min) building molecules:        0.0018
-Time spent (sec) building molecules:        0.1080
-     build time (sec) per structure:     0.0000198
- Time spent (sec) writing molecules:        0.1760
-                   Total time (sec):        0.2920
-                   Total time (min):        0.0049
+Time spent (min) building molecules:        0.0047
+Time spent (sec) building molecules:        0.2840
+     build time (sec) per structure:     0.0000193
+ Time spent (sec) writing molecules:        0.4480
+                   Total time (sec):        0.7400
+                   Total time (min):        0.0123
 ******************************************************************************

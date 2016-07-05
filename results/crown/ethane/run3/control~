@@ -1,4 +1,4 @@
-LINK maxconn=2 useclass numview=1000
+LINK drivea maxconn=2 useclass numview=1000
 
 
 This example illustrates the use of testdrive.  It produces two files named

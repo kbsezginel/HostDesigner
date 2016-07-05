@@ -19,7 +19,8 @@ def hdo_read(hdo_dir, num='all', table=True, hdo='out_1.hdo'):
         if line.replace(' ', '').strip('\n').isdigit():
             hdo_structures['num_atoms'].append(int(line.replace(' ', '').strip('\n')))
         if 'RMSD' in line:
-            hdo_structures['rmsd'].append(float(line.split(',')[0].split('=')[-1]))
+            # hdo_structures['rmsd'].append(float(line.split(',')[0].split('=')[-1]))
+            hdo_structures['rmsd'].append(line.split(',')[0].split('=')[-1])
             hdo_structures['energy'].append(float(line.split(',')[2].split('_')[1]))
             hdo_structures['info'].append(line.strip('_'))
             hdo_structures['linker'].append(line.strip('_').split('_')[2])
