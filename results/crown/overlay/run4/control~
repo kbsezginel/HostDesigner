@@ -1,0 +1,6 @@
+OVER notype maxconn=2
+
+
+Example of the use of symmetric drives and symmetric attachment points
+to generate a macrocyle.  Run evaluates 8,758 geometries in 3.1 seconds
+on a MacPro (2.8 GHz processor).

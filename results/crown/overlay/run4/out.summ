@@ -1,0 +1,36 @@
+******************************************************************************
+******************************************************************************
+HOSTDESIGNER RUN SUMMARY
+Date of run:  Tue Jul  5 14:50:42 2016
+******************************************************************************
+******************************************************************************
+Name of Host A:  3:RMSD=0.069,nrot=3,E=_1.709_ethane_________________________
+******************************************************************************
+Input control file follows:
+ 
+OVER notype maxconn=2 drivea                                                    
+                                                                                
+                                                                                
+Example of the use of symmetric drives and symmetric attachment points          
+to generate a macrocyle.  Run evaluates 8,758 geometries in 3.1 seconds         
+on a MacPro (2.8 GHz processor).                                                
+ 
+Drive input for host A follows:
+B I -0.300000  0.300000 0.10000 2 17
+B I -0.300000  0.300000 0.10000 3 10
+A I -10. 10. 5. 17 2 5
+A I -10. 10. 5. 10 3 4
+ 
+******************************************************************************
+               Number of links read:           616
+               Number of links used:           616
+Total number of structures examined:       1053549
+        Number of structures stored:             0
+  Time spent (sec) initializing run:        0.0320
+Time spent (min) building molecules:        3.0361
+Time spent (sec) building molecules:      182.1640
+     build time (sec) per structure:     0.0001729
+ Time spent (sec) writing molecules:        0.0000
+                   Total time (sec):      182.1960
+                   Total time (min):        3.0366
+******************************************************************************

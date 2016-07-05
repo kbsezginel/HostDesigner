@@ -1,0 +1,30 @@
+******************************************************************************
+******************************************************************************
+HOSTDESIGNER RUN SUMMARY
+Date of run:  Tue Jul  5 13:52:55 2016
+******************************************************************************
+******************************************************************************
+Name of Host A:  18-crown-6 only O and H atoms overlay input                 
+******************************************************************************
+Input control file follows:
+ 
+OVER notype noasym                                                              
+                                                                                
+                                                                                
+Example of the use of symmetric drives and symmetric attachment points          
+to generate a macrocyle.  Run evaluates 8,758 geometries in 3.1 seconds         
+on a MacPro (2.8 GHz processor).                                                
+ 
+******************************************************************************
+               Number of links read:          8266
+               Number of links used:           914
+Total number of structures examined:            59
+        Number of structures stored:             0
+  Time spent (sec) initializing run:        0.0240
+Time spent (min) building molecules:        0.0071
+Time spent (sec) building molecules:        0.4240
+     build time (sec) per structure:     0.0071864
+ Time spent (sec) writing molecules:        0.0000
+                   Total time (sec):        0.4480
+                   Total time (min):        0.0075
+******************************************************************************
