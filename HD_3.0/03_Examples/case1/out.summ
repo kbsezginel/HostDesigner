@@ -1,7 +1,7 @@
 ******************************************************************************
 ******************************************************************************
 HOSTDESIGNER RUN SUMMARY
-Date of run:  Thu Jun  9 16:07:59 2016
+Date of run:  Fri Oct 21 15:40:16 2016
 ******************************************************************************
 ******************************************************************************
 Name of Host A:  Lithium dimethylether, M-O = 2.26 angstroms                 
@@ -27,10 +27,10 @@ This example run evaluates 1,652,352 structures in 12.8 sec on a MacPro
 Total number of structures examined:       1652352
         Number of structures stored:          1000
   Time spent (sec) initializing run:        0.0200
-Time spent (min) building molecules:        0.1091
-Time spent (sec) building molecules:        6.5480
+Time spent (min) building molecules:        0.1110
+Time spent (sec) building molecules:        6.6600
      build time (sec) per structure:     0.0000040
  Time spent (sec) writing molecules:        0.0320
-                   Total time (sec):        6.6000
-                   Total time (min):        0.1100
+                   Total time (sec):        6.7120
+                   Total time (min):        0.1119
 ******************************************************************************
