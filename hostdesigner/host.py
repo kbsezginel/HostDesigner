@@ -6,16 +6,13 @@ import yaml
 from hostdesigner.visualize import write_pdb
 
 
-host_export_dir = os.path.join(os.getcwd(), 'doc', 'tmp')
-
-
 class Host:
     """
     Host class.
     """
     def __init__(self, host_input=None, run_type=None):
         self.run_type = run_type
-        self.export_dir = host_export_dir
+        self.export_dir = os.getcwd()
         if type(host_input) is str:
             self.read(host_input)
         elif type(host_input) is dict:
@@ -64,10 +61,18 @@ class Host:
             self.n_attachments = int(self.lines[self.n_atoms + 2].strip())
             for line in self.lines[self.n_atoms + 3:self.n_atoms + self.n_attachments + 3]:
                 self.attachments.append(line.split())
+            self.attachment_list = [int(i[0]) for i in self.attachments]
         elif self.run_type == 'OVERLAY':
-            self.n_attachments = [int(i) for i in mol_lines[n_atoms + 2].strip()]
-            for line in self.lines[self.n_atoms + 3:self.n_atoms + self.n_attachments[0] + 3]:
+            attachment_line = self.lines[self.n_atoms + 2].strip().split()
+            self.n_attachments = int(attachment_line[0])
+            if len(attachment_line) > 1:
+                self.n_sym = int(attachment_line[1])
+                self.n_attachments = self.n_attachments * (self.n_sym + 1)
+            else:
+                self.n_sym = 0
+            for line in self.lines[self.n_atoms + 3:self.n_atoms + self.n_attachments + 3]:
                 self.attachments.append(line.split())
+            self.attachment_list = [int(i[0]) for i in self.attachments]
         else:
             print('No run type found for %s!' % self.name)
 
