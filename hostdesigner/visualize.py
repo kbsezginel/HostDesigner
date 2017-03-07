@@ -3,15 +3,17 @@
 # Date: February 2017
 import os
 import math
+import tempfile
 import nglview
 
+# All files to be viewed are generated into local temp directory and deleted afterwards
+view_dir = tempfile.gettempdir()
 
-host_export_dir = os.path.join(os.getcwd(), 'doc', 'tmp')
 
-
-def show(*args, move='auto', div=5, distance=(-10, -10), axis=0, rename='F'):
+def show(*args, camera='perspective', move='auto', div=5, distance=(-10, -10), axis=0, recolor=None, replace=None, rename='F'):
     """
     Show given structures using nglview
+        - camera: 'perspective' / 'orthographic'
         - move: separate multiple structures equally distant from each other
         - distance: separation distance
         - axis: separation direction
@@ -25,12 +27,15 @@ def show(*args, move='auto', div=5, distance=(-10, -10), axis=0, rename='F'):
         translation_vectors = [[0, 0, 0]] * len(args)
     atom_names = []
     atom_coors = []
-    for host, vec in zip(args, translation_vectors):
-        atom_names += host.atom_names
-        atom_coors += translate(host.atom_coors, vector=vec)
-    pdb_path = os.path.join(host_export_dir, 'view.pdb')
-    write_pdb(pdb_path, atom_names, atom_coors, rename=rename)
-    return nglview.show_structure_file(pdb_path)
+    for molecule, vec in zip(args, translation_vectors):
+        atom_names += molecule.atom_names
+        atom_coors += translate(molecule.atom_coors, vector=vec)
+    pdb_path = os.path.join(view_dir, 'view.pdb')
+    write_pdb(pdb_path, atom_names, atom_coors, replace=replace, rename=rename)
+    view = nglview.show_structure_file(pdb_path)
+    view.camera = camera
+    os.remove(pdb_path)
+    return view
 
 
 def arrange_structure_positions(n_structures, div=5, distance=(10, 10), rename='F'):
@@ -77,22 +82,34 @@ def axis_translation(n_structures, distance=-10, axis=0):
     return translation_vectors
 
 
-def write_pdb(pdb_path, names, coors, rename=False):
+def write_pdb(pdb_path, names, coors, replace=None, rename='F'):
     """ Export given atomic coordinates to pdb format """
-    replace_list = ['Du', 'DU', 'X']
-    if len(rename) > 1:
-        replace_list += [rename[0]]
-        rename = rename[1]
+    if replace is not None:
+        names = change_atom_names(names, replace=replace, rename=rename)
     structure_name = os.path.splitext(os.path.basename(pdb_path))[0]
     with open(pdb_path, 'w') as pdb_file:
         pdb_file.write('HEADER    ' + structure_name + '\n')
         format = 'HETATM%5d%3s  MOL     1     %8.3f%8.3f%8.3f  1.00  0.00          %2s\n'
         atom_index = 1
         for atom_name, atom_coor in zip(names, coors):
-            if rename is not False:
-                if atom_name in replace_list:
-                    atom_name = rename
             x, y, z = atom_coor
             pdb_file.write(format % (atom_index, atom_name, x, y, z, atom_name.rjust(2)))
             atom_index += 1
         pdb_file.write('END\n')
+
+
+def change_atom_names(atom_names, replace=None, rename='F'):
+    """ Change given list of atom names by indices or names """
+    new_names = []
+    replace_indices = []
+    replace_names = []
+    if all(type(n) is int for n in replace):
+        replace_indices = replace
+    elif all(type(n) is str for n in replace):
+        replace_names = replace
+    for i, name in enumerate(atom_names, start=1):
+        if i in replace_indices or name in replace_names:
+            new_names.append(rename)
+        else:
+            new_names.append(name)
+    return new_names
