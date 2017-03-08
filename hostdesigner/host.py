@@ -106,7 +106,7 @@ class Host:
         self.atom_names = new_names
         self.atom_coors = new_coors
 
-    def export(self, file_format=None, export_dir=None, name=None, atom_type=None):
+    def export(self, file_format='pdb', export_dir=None, name=None, atom_type=None):
         """ Export host object """
         if export_dir is None:
             export_dir = self.export_dir
@@ -114,8 +114,8 @@ class Host:
             name = self.name
         if file_format is 'pdb':
             pdb_path = os.path.join(export_dir, '%s.pdb' % name)
-            write_pdb(pdb_path, self.atom_names, self.atom_coors)
-            return pdb_path
+            with open(pdb_path, 'w') as pdb_file:
+                write_pdb(pdb_file, self.atom_names, self.atom_coors, header=name)
         elif file_format is 'dict':
             self.to_dict()
         elif file_format is 'host':
