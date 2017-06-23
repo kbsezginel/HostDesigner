@@ -58,3 +58,17 @@ def generate(control, export_dir, space=20):
     with open(control_path, 'w') as c:
         for line in cont_lines:
             c.write(line)
+
+
+def overlay(hosta=None, export_dir=None):
+    """ Get a generic OVERLAY control file """
+    cont = dict()
+    if hosta is not None:
+        cont['hosta'] = '%s  ' % hosta
+    cont['run_type'] = 'OVER'
+    cont['notype'] = True
+    cont['maxconn'] = 50
+    if export_dir is not None:
+        generate(cont, export_dir)
+    else:
+        return cont
