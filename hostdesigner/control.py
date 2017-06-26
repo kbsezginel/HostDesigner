@@ -5,7 +5,7 @@ import os
 
 """ Control file keywords """
 sample = dict(
-    run_type=None,      # Type of HostDesigner run (LINK or OVERLAY)
+    run_type=None,      # Type of HostDesigner run (LINK or OVER)
     hosta=None,         # File name for OVERLAY input or LINKER input fragment 1 (default: hosta`)
     hostb=None,         # File name for LINKER input fragment 2 (default: hostb)
     notype=False,       # If true eliminates the need to include atom type in input
@@ -43,21 +43,25 @@ def clean(control):
 def generate(control, export_dir, space=20):
     """ Generate control file with specified keywords """
     cont = clean(control)
-    cont_lines = ['%s%sAND\n' % (control['run_type'], (space - len(control['run_type'])) * ' ')]
-    del cont['run_type']
-    for i, kwd in enumerate(cont):
-        if type(cont[kwd]) is bool:
-            cl = len(kwd)
-            end = '%sAND\n' % (' ' * (space - cl)) if i < len(cont) - 1 else '\n'
-            cont_lines.append('%s%s' % (kwd, end))
-        else:
-            cl = len(kwd) + len(str(cont[kwd]))
-            end = '%sAND\n' % (' ' * (space - cl - 1)) if i < len(cont) - 1 else '\n'
-            cont_lines.append('%s=%s%s' % (kwd, str(cont[kwd]), end))
+    if len(cont) == 1:
+        cont_lines = ['%s\n' % cont['run_type']]
+    else:
+        cont_lines = ['%s%sAND\n' % (cont['run_type'], (space - len(cont['run_type'])) * ' ')]
+        del cont['run_type']
+        for i, kwd in enumerate(cont):
+            if type(cont[kwd]) is bool:
+                cl = len(kwd)
+                end = '%sAND\n' % (' ' * (space - cl)) if i < len(cont) - 1 else '\n'
+                cont_lines.append('%s%s' % (kwd, end))
+            else:
+                cl = len(kwd) + len(str(cont[kwd]))
+                end = '%sAND\n' % (' ' * (space - cl - 1)) if i < len(cont) - 1 else '\n'
+                cont_lines.append('%s=%s%s' % (kwd, str(cont[kwd]), end))
     control_path = os.path.join(export_dir, 'control')
     with open(control_path, 'w') as c:
         for line in cont_lines:
             c.write(line)
+    return cont
 
 
 def overlay(hosta=None, export_dir=None):
