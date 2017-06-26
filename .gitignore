@@ -2,13 +2,7 @@
 results
 
 # HostDesigner example case files
-HD_3.0/03_Examples/case1/out.summ
-HD_3.0/03_Examples/case2/case2.summ
-HD_3.0/03_Examples/case4/urea.summ
-HD_3.0/03_Examples/case5/out.summ
-HD_3.0/03_Examples/case6/out.summ
-HD_3.0/03_Examples/case7/tetra.summ
-HD_3.0/03_Examples/case8/urea_macro.summ
+HD_3.0/03_Examples/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
