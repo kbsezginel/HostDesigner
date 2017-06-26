@@ -7,18 +7,19 @@ import tempfile
 import nglview
 
 
-def show(*args, camera='perspective', move='auto', div=5, distance=(-10, -10), axis=0, replace=None, rename='F'):
+def show(*args, camera='perspective', move='auto', div=5, distance=(-10, -10), axis=0, caps=True, save=None, group=True):
     """
-    Show given structures using nglview
+    Show given structure(s) using nglview
+        - save: file_path -> save pdb file to given path
         - camera: 'perspective' / 'orthographic'
-        - move: separate multiple structures equally distant from each other
-        - distance: separation distance
-        - axis: separation direction
-        - replace: replace names of a given list of atoms (either list of indices or list of atom types)
-        - rename: rename the selected atoms to given atom name (use 'F' or 'S' for different colors)
+        - move: 'auto' / 'single' / None -> separate multiple structures equally distant from each other
+        - distance: tuple (x, y) -> separation distance
+        - axis: 0 / 1 / 2 -> separation direction (0:x, 1:y, 2:z)
+        - caps: bool -> capitalize atom names so they show true colors in nglview+
+        - group: bool -> group molecules in pdb file (to show bonds properly in nglview)
     """
     if move is 'auto':
-        translation_vectors = arrange_structure_positions(len(args), div=div, distance=distance, rename='F')
+        translation_vectors = arrange_structure_positions(len(args), div=div, distance=distance)
     elif move is 'single':
         translation_vectors = axis_translation(len(args), distance=distance[0], axis=axis)
     else:
@@ -26,19 +27,30 @@ def show(*args, camera='perspective', move='auto', div=5, distance=(-10, -10), a
 
     atom_names = []
     atom_coors = []
-    for molecule, vec in zip(args, translation_vectors):
+    group_numbers = []
+    for mol_index, (molecule, vec) in enumerate(zip(args, translation_vectors), start=1):
         atom_names += molecule.atom_names
         atom_coors += translate(molecule.atom_coors, vector=vec)
+        group_numbers += [mol_index] * len(molecule.atom_names)
 
-    if replace is not None:
-        atom_names = change_atom_names(atom_names, replace=replace, rename=rename)
+    # nglview require atom names in all caps to color them properly
+    if caps:
+        atom_names = [name.upper() for name in atom_names]
 
+    # nglview requires molecules to be grouped separately to show proper bonding
+    if not group:
+        group_numbers = [1] * len(atom_names)
     temp_pdb_file = tempfile.NamedTemporaryFile(mode='w+', suffix='.pdb')
-    write_pdb(temp_pdb_file, atom_names, atom_coors)
+    write_pdb(temp_pdb_file, atom_names, atom_coors, group=group_numbers)
 
     view = nglview.show_structure_file(temp_pdb_file.name)
     view.camera = camera
     temp_pdb_file.close()
+
+    if save is not None:
+        with open(save, 'w') as save_file:
+            write_pdb(save_file, atom_names, atom_coors, group=group_numbers)
+
     return view
 
 
@@ -86,29 +98,15 @@ def axis_translation(n_structures, distance=-10, axis=0):
     return translation_vectors
 
 
-def write_pdb(pdb_file, names, coors, header='Host'):
+def write_pdb(pdb_file, names, coors, group=None, header='Host'):
     """ Write given atomic coordinates to file object in pdb format """
     pdb_file.write('HEADER    ' + header + '\n')
-    format = 'HETATM%5d%3s  MOL     1     %8.3f%8.3f%8.3f  1.00  0.00          %2s\n'
+    format = 'HETATM%5d%3s  M%4i %3i     %8.3f%8.3f%8.3f  1.00  0.00          %2s\n'
+    if group is None:
+        group = [1] * len(names)
     for atom_index, (atom_name, atom_coor) in enumerate(zip(names, coors), start=1):
         x, y, z = atom_coor
-        pdb_file.write(format % (atom_index, atom_name, x, y, z, atom_name.rjust(2)))
+        residue_no = group[atom_index - 1]
+        pdb_file.write(format % (atom_index, atom_name, residue_no, residue_no, x, y, z, atom_name.rjust(2)))
     pdb_file.write('END\n')
     pdb_file.flush()
-
-
-def change_atom_names(atom_names, replace=None, rename='F'):
-    """ Change given list of atom names by indices or names """
-    new_names = []
-    replace_indices = []
-    replace_names = []
-    if all(type(n) is int for n in replace):
-        replace_indices = replace
-    elif all(type(n) is str for n in replace):
-        replace_names = replace
-    for i, name in enumerate(atom_names, start=1):
-        if i in replace_indices or name in replace_names:
-            new_names.append(rename)
-        else:
-            new_names.append(name)
-    return new_names
