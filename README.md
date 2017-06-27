@@ -1,28 +1,45 @@
 # HostDesigner
 A Program for the de Novo Structure-Based Design of Molecular Receptors with Binding Sites that Complement Metal Ion Guests
 [<sup>*</sup>](http://pubs.acs.org/doi/full/10.1021/ic0202920)
+
+Table of contents
+=================
+* [HostDesigner](#hostdesigner)
+* [Installation](#installation)
+  * [HostDesigner Installation](#hostdesigner-installation)
+    * [Compiling the code](#compiling-the-code)
+    * [Configuring the environment](#configuring-the-environment)
+  * [Python Interface Installation](#python-interface-installation)
+  * [Running test cases](#running-test-cases)
+* [Usage](#usage)
+  * [Running simulations](#running-simulations)
+  * [Reading results](#reading-results)
+* [Terms of Use](#terms-of-use)
+
 ## Installation
-**1. HostDesigner Installation**
+
+### HostDesigner Installation
 
 HostDesigner V3.0 source code can be downloaded [here](https://sourceforge.net/projects/hostdesigner-v3-0/). The source code is also provided in this repository. Detailed installation instructions are provided with the source code under *00_Documentation* folder. Below a summarized version of the instructions are provided.
 
-**- Compiling the code:**
+#### Compiling the code
 
 HostDesigner is provided as Fortran source code. The code can be compiled using [gfortran](https://gcc.gnu.org).
-The downloaded directory *01_Source* contains the files needed to create the HostDesigner executable. 
+The downloaded directory *01_Source* contains the files needed to create the HostDesigner executable.
 Assuming that that both *gfortran* and *make* executables are available in the user’s path, simply open a terminal window, enter the *01_Source* directory, and run *make*. This should produce the executable named *hd3.0* in less than a minute.
 
-`cd HD_3.0/01_Source`
+```
+cd HD_3.0/01_Source
+make
+```
 
-`make`
-
-**- Configuring the environment**
+#### Configuring the environment
 
 HostDesigner is a command line executable and, once the system is properly configured, the
 user should be able to invoke it from any directory. After *hd3.0* has been successfully compiled,
-there are two additional things that must be done for this to happen. 
+there are two additional things that must be done for this to happen.
 
-First, the executable must be placed in a location that is in the user’s path. 
+First, the executable must be placed in a location that is in the user’s path.
 
 Second, the executable must be provided the location of two required data files – *CONSTANTS* and *LIBRARY*.
 
@@ -31,44 +48,82 @@ For a bash user with username *hay* the steps are as follows:
 1. Put the executable *hd3.0* in a directory that is part of the user’s default path
 2. Add the following lines to *.bashrc* file:
 
-`export PATH=“PATH:/Users/hay/bin”`
-
-`export HD_DIR=“/Users/hay/bin/hd_dir”`
+```
+export PATH=“PATH:/Users/hay/bin”
+export HD_DIR=“/Users/hay/bin/hd_dir”
+```
 
 After completing the above steps, the configuration should be tested by opening a new terminal
 window and issuing a couple simple commands. Issuing the command:
 
-`which hd3.0`
+```
+which hd3.0
+```
 
 Should return the response:
 
-`path_to_the_executable/hd3.0`
+```
+path_to_the_executable/hd3.0
+```
 
 To verify that the environmental variable has been properly set, issue the command:
 
-`echo $HD_DIR`
+```
+echo $HD_DIR
+```
 
-**- Running test cases**
+### Python Interface Installation
+
+HostDesigner python interface allows the user to create and run HostDesigner simulations with python scripts. Moreover, resulting structures can be visualized with Jupyter notebooks.
+
+To install the interface run:
+
+```
+python setup.py install
+```
+
+### Running test cases
 
 Directory *03_Examples* in the download package contains eight test cases that can be run to
 verify that HostDesigner has been correctly compiled and that the system has been correctly
 configured. Each test case consists of a control file, input fragment(s), and a prior summary file
 obtained when the test was last run.
 
-To run any of the test cases, open a terminal window, enter one of the subdirectories containing the input files (named case#), type *hd3.0* on the command line, and hit return. 
-The code should execute and begin printing information to the screen. 
-All the test cases should complete within a couple of minutes and produce several output files. 
+To run any of the test cases, open a terminal window, enter one of the subdirectories containing the input files (named case#), type *hd3.0* on the command line, and hit return.
+The code should execute and begin printing information to the screen.
+All the test cases should complete within a couple of minutes and produce several output files.
 To verify expected performance, compare the output file with the .summ extension to the provided file named prior.summ, which is output obtained when the authors previously ran the example.
 The timings will be machine specific, but the number of links read, the number of links used, the total number of structures examined, and the number of structures stored should be identical.
+## Usage
+### Running simulations
 
+### Reading results
+HostDesigner results are stored in *.hdo* format which can be read using *Hdo* object.
+```python
+hdo_path = 'path/to/results.hdo'
+hdo = Hdo(hdo_path)
+hdo.tabulate(structures=5)
+```
 
-**2. Python Interface Installation**
+|   Energy | Linker                       |   N_atoms |   RMSD |   Structure |
+|---------:|:-----------------------------|----------:|-------:|------------:|
+|    4.243 | 2-ethylbutene                |        71 |  0.009 |           0 |
+|    3.378 | cis-3,5-dimethylcyclopentene |        74 |  0.085 |           1 |
+|    1.24  | 3-methyl-1,4-pentadiene      |        65 |  0.149 |           2 |
+|    1.24  | 1,3,5-trimethylbenzene       |        80 |  0.16  |           3 |
+|    1.24  | 1,3-dimethylbenzene          |        71 |  0.166 |           4 |
+HostDesigner outputs two separate *.hdo* files where one is sorted according to RMSD and the other one is sorted according to energy. These can be read separately or alternatively results can also be sorted according to number of atoms, RMSD, and energy of the structures using the *sort* method.
+```python
+hdo1_sorted = hdo1.sort(var='energy', structures=5)
+```
+|   Energy | Linker                  |   N_atoms |   RMSD |   Structure |
+|---------:|:------------------------|----------:|-------:|------------:|
+|    1.24  | 3-methyl-1,4-pentadiene |        65 |  0.149 |           2 |
+|    1.24  | 1,3,5-trimethylbenzene  |        80 |  0.16  |           3 |
+|    1.24  | 1,3-dimethylbenzene     |        71 |  0.166 |           4 |
+|    1.981 | trans-2-butene          |        53 |  0.547 |          11 |
+|    2.232 | cis-3-hexene            |        71 |  0.323 |           6 |
 
-HostDesigner python interface allows the user to create and run HostDesigner simulations with python scripts. Moreover, resulting structures can be visualized with Jupyter notebooks.
-
-To install the interface run:
-
-`python setup.py install`
 
 ### Terms of Use
 Copyright © 2015 Benjamin Hay
