@@ -1,8 +1,9 @@
 # Reading and writing hostecule files for HostDesigner
 # Author: Kutay B Sezginel
 # Date: February 2017
-from tabulate import tabulate
 import os
+import copy
+from tabulate import tabulate
 from hostdesigner.host import Host
 from hostdesigner.visualize import show, write_pdb
 
@@ -14,23 +15,22 @@ class Hdo:
     """
     HostDesigner output file object.
     """
-    def __init__(self, path=None, run_type=None):
-        self.run_type = run_type
+    def __init__(self, hdo_path, drive=False):
         self.export_dir = hdo_export_dir
-        if type(path) is str:
-            self.path = path
-            self.read(path)
+        self.path = hdo_path
+        if drive:
+            self.read_drive()
+        else:
+            self.read()
             self.read_structures()
 
-    def read(self, hdo_path=None):
+    def read(self):
         """
         Read .hdo output files from a HostDesigner run with given path.
         """
-        hdo_path = self.path if type(hdo_path) is not str else hdo_path
-        with open(hdo_path, 'r') as hdo:
+        with open(self.path, 'r') as hdo:
             self.lines = hdo.readlines()
 
-        self.structures = []
         self.n_structures = 0
         self.structures = {'rmsd': [], 'energy': [], 'n_atoms': [], 'atom': [], 'coor': [],
                            'info': [], 'xyz': [], 'host': [], 'linker': [], 'index': []}
@@ -86,7 +86,7 @@ class Hdo:
                             'N_atoms': sorted_structures['n_atoms'][:num],
                             'RMSD': sorted_structures['rmsd'][:num],
                             'Energy': sorted_structures['energy'][:num]}, headers="keys"))
-        new_hdo = Hdo()
+        new_hdo = copy.deepcopy(self)
         new_hdo.structures = sorted_structures
         return new_hdo
 
@@ -125,14 +125,52 @@ class Hdo:
             self.structures['xyz'].append(xyz_lines)
             start_line += self.structures['n_atoms'][structure] + 2
 
-    def show(self, structures=3, start=0, move='auto', div=5, distance=(-10, 10), axis=0, rename='F'):
+    def read_drive(self):
+        """
+        Read test drive output
+        """
+        with open(self.path, 'r') as drive:
+            self.lines = drive.readlines()
+
+        self.n_structures = 0
+        self.structures = {'rmsd': [], 'energy': [], 'n_atoms': [], 'atom': [], 'coor': [],
+                           'info': [], 'xyz': [], 'host': [], 'linker': [], 'index': []}
+        xyz_indices = []
+        for line_index, line in enumerate(self.lines):
+            if 'Drive' in line:
+                xyz_indices.append(line_index - 1)
+
+        for i in range(1, len(xyz_indices) - 1):
+            start = xyz_indices[i]
+            end = xyz_indices[i + 1]
+            self.structures['n_atoms'].append(int(self.lines[start].strip()))
+            self.structures['xyz'].append(self.lines[start:end])
+            self.structures['atom'].append([line.strip().split()[0] for line in self.lines[start + 2:end]])
+            self.structures['coor'].append([[float(i) for i in line.strip().split()[1:]] for line in self.lines[start + 2:end]])
+            self.structures['info'].append(self.lines[start + 1].strip())
+            self.structures['index'].append(i)
+            self.structures['host'].append('---')
+            self.structures['linker'].append('---')
+            self.structures['energy'].append('---')
+            self.structures['rmsd'].append('---')
+
+        self.n_structures = len(xyz_indices)
+
+    def show(self, structures=3, start=0, color=False,
+             camera='perspective', move='auto', div=5, distance=(-10, 10), axis=0, caps=True, save=None, group=True, rotate=None):
         """
         Show hdo results output structures
         - structures: number of structures to visualize
+        - start: start showing structures from given index
+        - color: color Dummy atoms separetely
+        other arguments are directly used with show method in visualize library.
         """
         hosts = []
         for i in range(structures):
             h = Host()
             h.read_hdo(self.structures, idx=i + start)
-            hosts.append(h)
-        return show(*hosts, move=move, div=div, distance=distance, axis=axis, rename=rename)
+            if color:
+                hosts.append(h.color())
+            else:
+                hosts.append(h)
+        return show(*hosts, camera=camera, move=move, div=div, distance=distance, axis=axis, caps=caps, save=save, group=group, rotate=rotate)
