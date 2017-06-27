@@ -3,6 +3,7 @@
 # Date: February 2017
 import os
 import yaml
+import copy
 from hostdesigner.visualize import write_pdb
 
 
@@ -93,6 +94,8 @@ class Host:
         self.atom_coors = hdo_structures['coor'][idx]
         self.atom_names = hdo_structures['atom'][idx]
         self.name = hdo_structures['linker'][idx]
+        self.rmsd = hdo_structures['rmsd'][idx]
+        self.energy = hdo_structures['energy'][idx]
 
     def remove_atoms(self, atom=['X']):
         """ Remove all atoms with given name from host object """
@@ -151,3 +154,9 @@ class Host:
                     atom_names=self.atom_names, atom_coors=self.atom_names, bonds=self.bonds,
                     n_attachments=self.n_attachments, attachments=self.attachments,
                     n_drive=self.n_drive, drive=self.drive)
+
+    def color(self, rename='Cl', replace=['Du', 'X']):
+        """ Return atom names for dummy atoms differently to identify in visualization """
+        colored = copy.deepcopy(self)
+        colored.atom_names = [rename if n in replace else n for n in colored.atom_names]
+        return colored
