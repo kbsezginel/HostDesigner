@@ -45,7 +45,7 @@ class Hdo:
                 self.structures['index'].append(self.n_structures)
                 self.n_structures += 1
 
-    def tabulate(self, structures=None):
+    def tabulate(self, structures=None, tablefmt='simple'):
         """
         Print hdo results in table format.
         """
@@ -57,7 +57,7 @@ class Hdo:
                         'Linker': self.structures['linker'][:num],
                         'N_atoms': self.structures['n_atoms'][:num],
                         'RMSD': self.structures['rmsd'][:num],
-                        'Energy': self.structures['energy'][:num]}, headers="keys"))
+                        'Energy': self.structures['energy'][:num]}, headers="keys", tablefmt=tablefmt))
 
     def sort(self, var='n_atoms', structures=None, table=True):
         """
