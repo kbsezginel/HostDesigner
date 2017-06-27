@@ -7,7 +7,7 @@ import tempfile
 import nglview
 
 
-def show(*args, camera='perspective', move='auto', div=5, distance=(-10, -10), axis=0, caps=True, save=None, group=True):
+def show(*args, camera='perspective', move='auto', div=5, distance=(-10, -10), axis=0, caps=True, save=None, group=True, rotate=None):
     """
     Show given structure(s) using nglview
         - save: file_path -> save pdb file to given path
@@ -17,6 +17,7 @@ def show(*args, camera='perspective', move='auto', div=5, distance=(-10, -10), a
         - axis: 0 / 1 / 2 -> separation direction (0:x, 1:y, 2:z)
         - caps: bool -> capitalize atom names so they show true colors in nglview+
         - group: bool -> group molecules in pdb file (to show bonds properly in nglview)
+        - rotate: 0 / 1 / 2 -> rotate 90 degrees in (0:x, 1:y, 2:z) axis (view in xy plane)
     """
     if move is 'auto':
         translation_vectors = arrange_structure_positions(len(args), div=div, distance=distance)
@@ -30,7 +31,11 @@ def show(*args, camera='perspective', move='auto', div=5, distance=(-10, -10), a
     group_numbers = []
     for mol_index, (molecule, vec) in enumerate(zip(args, translation_vectors), start=1):
         atom_names += molecule.atom_names
-        atom_coors += translate(molecule.atom_coors, vector=vec)
+        coordinates = molecule.atom_coors
+        if rotate is not None:
+            coordinates = rotate_90(coordinates, axis=rotate)
+        coordinates = translate(coordinates, vector=vec)
+        atom_coors += coordinates
         group_numbers += [mol_index] * len(molecule.atom_names)
 
     # nglview require atom names in all caps to color them properly
@@ -54,7 +59,7 @@ def show(*args, camera='perspective', move='auto', div=5, distance=(-10, -10), a
     return view
 
 
-def arrange_structure_positions(n_structures, div=5, distance=(10, 10), rename='F'):
+def arrange_structure_positions(n_structures, div=5, distance=(10, 10)):
     """
     Arrange structure positions according to number of structures given.
     """
@@ -96,6 +101,20 @@ def axis_translation(n_structures, distance=-10, axis=0):
         vec[axis] = -lim + i * distance
         translation_vectors.append(vec)
     return translation_vectors
+
+
+def rotate_90(atom_coors, axis=0):
+    """
+    Rotate coordinates 90 degrees in x, y or z axis.
+    """
+    if axis == 0:             # Rotate 90 degrees on x-axis
+        new_coors = [[c[0], c[2], c[1]] for c in atom_coors]
+    elif axis == 1:           # Rotate 90 degrees on y-axis
+        new_coors = [[c[2], c[1], c[0]] for c in atom_coors]
+    elif axis == 2:           # Rotate 90 degrees on z-axis
+        new_coors = [[c[1], c[0], c[2]] for c in atom_coors]
+
+    return new_coors
 
 
 def write_pdb(pdb_file, names, coors, group=None, header='Host'):
