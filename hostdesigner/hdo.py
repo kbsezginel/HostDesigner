@@ -156,6 +156,24 @@ class Hdo:
 
         self.n_structures = len(xyz_indices)
 
+    def save(self, file_name, structures=1, file_format='xyz'):
+        """
+        Save structures.
+        - file_name: Output file name(s). File extension is not required.
+        If multiple structures are being saved they are numbered separetely
+        - structures: Number of structures to save
+        - file_format: Output file format ('xyz', 'pdb')
+        """
+        for i in range(structures):
+            structure_file = '%s-%i.%s' % (file_name, i, file_format)
+            if file_format == 'xyz':
+                with open(structure_file, 'w') as xyz:
+                    for line in self.structures['xyz'][i]:
+                        xyz.write(line)
+            elif file_format == 'pdb':
+                with open(structure_file, 'w') as pdb:
+                    write_pdb(pdb, self.structures['atom'][i], self.structures['coor'][i])
+
     def show(self, structures=3, start=0, color=False,
              camera='perspective', move='auto', div=5, distance=(-10, 10), axis=0, caps=True, save=None, group=True, rotate=None):
         """
