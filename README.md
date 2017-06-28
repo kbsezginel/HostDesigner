@@ -13,6 +13,9 @@ Table of contents
   * [Running test cases](#running-test-cases)
 * [Usage](#usage)
   * [Running simulations](#running-simulations)
+    * [LINKER](#linker)
+    * [OVERLAY](#overlay)
+    * [Drive](#drive)
   * [Reading results](#reading-results)
 * [Terms of Use](#terms-of-use)
 
@@ -76,12 +79,21 @@ echo $HD_DIR
 
 HostDesigner python interface allows the user to create and run HostDesigner simulations with python scripts. Moreover, resulting structures can be visualized with Jupyter notebooks.
 
-To install the interface run:
-
+To install the interface clone the repository, enter the repository and run setup as:
 ```
+git clone https://github.com/kbsezginel/HostDesigner.git
+cd HostDesigner
 python setup.py install
 ```
+HostDesigner Python libray has following dependencies:
+- pyyaml   (for saving and reading yaml files)
+- tabulate (tabulating results)
+- nglview  (visualizing molecules)
 
+The dependencies are installed with the setup file and they can be also installed separately by:
+```
+pip install -r requirements.txt
+```
 ### Running test cases
 
 Directory *03_Examples* in the download package contains eight test cases that can be run to
@@ -95,11 +107,76 @@ All the test cases should complete within a couple of minutes and produce severa
 To verify expected performance, compare the output file with the .summ extension to the provided file named prior.summ, which is output obtained when the authors previously ran the example.
 The timings will be machine specific, but the number of links read, the number of links used, the total number of structures examined, and the number of structures stored should be identical.
 ## Usage
-### Running simulations
+A quick introduction for using HostDesigner is given here. More information on the algorithm can be found in [manual].
 
+The test cases can be run with the Python library using [jupyter notebooks](https://github.com/kbsezginel/HostDesigner/tree/master/notebooks) provided in the repository.
+### Running simulations
+HostDesigner simulations can be run using python library with:
+
+HostDesigner runs require following files in the run directory:
+- control: control run parameters
+- hosta: host structure a
+- hostb: host structure b
+
+The host structures are in special HostDesigner format and more information can be found in [manual]. If host structures are identical optionally a single file can be used by explicitly stating name of the structure in control file. By default default names are *hosta*, *hostb*, and *out*. The file names for a control file can be set by:
+
+```python
+from hostdesigner.control import sample
+
+control = dict(sample)
+control['hosta'] = host_a_file
+control['hostb'] = host_b_file
+control['out'] = output_file_name
+```
+#### LINKER
+```python
+from hostdesigner.run import hd_run
+from hostdesigner.control import sample
+
+# Initializing control file for a LINKER run
+control = dict(sample)
+control['run_type'] = 'LINK'
+
+hd_run('simulation/dir', control=control, verbose=2)
+```
+
+#### OVERLAY
+```python
+from hostdesigner.run import hd_run
+from hostdesigner.control import sample
+
+# Initializing control file for a LINKER run
+control = dict(sample)
+control['run_type'] = 'OVER'
+
+hd_run('simulation/dir', control=control, verbose=2)
+```
+
+#### Drive
+```python
+from hostdesigner.run import hd_run
+from hostdesigner.control import sample
+
+# Initializing control file for a LINKER run
+control = dict(sample)
+control['run_type'] = 'LINK'
+control['drivea'] = True
+control['driveb'] = True
+control['testdrive'] = True
+
+hd_run('simulation/dir', control=control, verbose=1)
+```
+**Archiving results**
+
+The simulation output files can be archived by recording the run environment. All input and output files would be stored in a *tar* file with the run directory name and a time stamp.
+```python
+hd_run('simulation/dir', control=control, verbose=1, archive=True)
+```
 ### Reading results
 HostDesigner results are stored in *.hdo* format which can be read using *Hdo* object.
 ```python
+from hostdesigner.hdo import Hdo
+
 hdo_path = 'path/to/results.hdo'
 hdo = Hdo(hdo_path)
 hdo.tabulate(structures=5)
@@ -112,10 +189,14 @@ hdo.tabulate(structures=5)
 |    1.24  | 3-methyl-1,4-pentadiene      |        65 |  0.149 |           2 |
 |    1.24  | 1,3,5-trimethylbenzene       |        80 |  0.16  |           3 |
 |    1.24  | 1,3-dimethylbenzene          |        71 |  0.166 |           4 |
+
+
 HostDesigner outputs two separate *.hdo* files where one is sorted according to RMSD and the other one is sorted according to energy. These can be read separately or alternatively results can also be sorted according to number of atoms, RMSD, and energy of the structures using the *sort* method.
+
 ```python
 hdo1_sorted = hdo1.sort(var='energy', structures=5)
 ```
+
 |   Energy | Linker                  |   N_atoms |   RMSD |   Structure |
 |---------:|:------------------------|----------:|-------:|------------:|
 |    1.24  | 3-methyl-1,4-pentadiene |        65 |  0.149 |           2 |
@@ -146,3 +227,6 @@ be liable for any direct, indirect, incidental, special, exemplary, or consequen
 profits; or business interruption) however caused and on any theory of liability, whether in
 contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the
 use of this software, even if advised of the possibility of such damage.
+
+
+[manual]: https://github.com/kbsezginel/HostDesigner/blob/master/HD_3.0/00_Documentation/HostDesigner%2C3.0_User's_Manual.pdf
