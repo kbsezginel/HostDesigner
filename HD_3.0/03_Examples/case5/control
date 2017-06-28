@@ -1,5 +1,2 @@
-OVER hosta=over1
-
-
-This is an example of an overlay run.  It examines 2676 structures in  
-2.8 seconds on a MacPro (2.8 GHz processor).
+OVER                AND
+hosta=over1

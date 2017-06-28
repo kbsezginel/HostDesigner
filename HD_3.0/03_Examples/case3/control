@@ -1,10 +1,7 @@
-LINK hosta=urea1 hostb=urea2 AND
-drivea driveb testdrive xyz
-
-
-This example illustrates the use of testdrive.  It produces two files named
-out_testa.hdo and out_testb.hdo
-
-Viewing the contents of these files with a molecular graphics software, for
-example, pcmodel, provides a way to ensure that the drive specifications are
-working as desired.
+LINKER              AND
+driveb              AND
+xyz                 AND
+drivea              AND
+hostb=urea2         AND
+testdrive           AND
+hosta=urea1

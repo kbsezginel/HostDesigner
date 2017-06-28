@@ -1,8 +1,9 @@
-LINK hosta=urea1 hostb=urea2 out=urea AND
-drivea driveb noasym maxnrot=4  numview=500
-
-This example uses the LINKER algorithm to search for bis-urea tweezers that
-are organized to bind the multiatom guest nitrate
-
-The run examines 5,452,465 geometries in 47.5 sec on a MacPro
-(2.8 GHz processor)
+LINKER              AND
+hosta=urea1         AND
+driveb              AND
+out=urea            AND
+maxnrot=4           AND
+hostb=urea2         AND
+noasym              AND
+numview=500         AND
+drivea

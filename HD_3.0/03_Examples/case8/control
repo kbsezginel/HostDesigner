@@ -1,8 +1,6 @@
-OVER hosta=urea_macro AND
-maxrmsd=1.0 drivea noasym AND
-out=urea_macro
-
-
-Example of the use of symmetric drives and symmetric attachment points
-to generate a macrocyle.  Run evaluates 8,758 geometries in 3.1 seconds  
-on a MacPro (2.8 GHz processor).
+OVER                AND
+drivea              AND
+out=urea_macro      AND
+hosta=urea_macro    AND
+noasym              AND
+maxrmsd=1.0

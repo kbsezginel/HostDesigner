@@ -1,8 +1,23 @@
 # User-defined files
 results
 
-# HostDesigner example case files
-HD_3.0/03_Examples/
+# HostDesigner example case output files
+HD_3.0/03_Examples/case1/*.summ
+HD_3.0/03_Examples/case1/*.hdo
+HD_3.0/03_Examples/case2/*.summ
+HD_3.0/03_Examples/case2/*.hdo
+HD_3.0/03_Examples/case3/*.summ
+HD_3.0/03_Examples/case3/*.hdo
+HD_3.0/03_Examples/case4/*.summ
+HD_3.0/03_Examples/case4/*.hdo
+HD_3.0/03_Examples/case5/*.summ
+HD_3.0/03_Examples/case5/*.hdo
+HD_3.0/03_Examples/case6/*.summ
+HD_3.0/03_Examples/case6/*.hdo
+HD_3.0/03_Examples/case7/*.summ
+HD_3.0/03_Examples/case7/*.hdo
+HD_3.0/03_Examples/case8/*.summ
+HD_3.0/03_Examples/case8/*.hdo
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

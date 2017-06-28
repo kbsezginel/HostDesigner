@@ -1,7 +1,7 @@
-OVER hosta=tetra_inp drivea out=tetra numview=100  AND
-noasym minconn=2 
-
-
-This run provides an example of the use of linked geometry drives.
-It examines 101,097 structures in 30.9 seconds on a MacPro (2.8 GHz
-processor)
+OVER                AND
+numview=100         AND
+drivea              AND
+out=tetra           AND
+noasym              AND
+minconn=2           AND
+hosta=tetra_inp
